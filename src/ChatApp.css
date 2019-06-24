@@ -1,0 +1,174 @@
+html {
+    background-color: white;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 30% 67%;
+    justify-content: space-between;
+}
+
+/* other peers ids */
+aside {
+    padding: 5px;
+    height: 96vh;
+}
+
+aside>h1 {
+    padding: 5px;
+    margin: 10px 5px;
+}
+
+.peers-ids-container {
+    height: 75vh;
+    overflow-y: scroll;
+}
+
+.peers-ids-container>div {
+    padding: 5px;
+    margin: 0 5px;
+    border-bottom: 1px solid gray;
+}
+
+.peers-ids-container>div:hover {
+    background: crimson;
+    cursor: pointer;
+    color: white;
+}
+
+.selected-peer{
+	background: crimson;
+	color: white;
+}
+
+/*************/
+section {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+
+}
+
+section>* {
+    margin: 2px 0;
+}
+
+/* personal information */
+.personal-info {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.personal-info * {
+    margin-bottom: 0;
+    font-size: 18px;
+}
+
+
+/* Messages */
+
+.msg-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 75vh;
+    max-height: 75vh;
+
+    overflow-y: scroll;
+    padding: 10px;
+    background: lightgray;
+}
+
+.msg-div {
+    display: grid;
+    grid-template-areas: "name msg""date date";
+
+    align-self: flex-start;
+
+    padding: 10px;
+    box-shadow: 5px 5px 5px gray;
+    border-radius: 5px;
+    margin: 5px 0;
+    background: #41f4b8;
+
+}
+
+.msg-div>* {
+    padding: 5px;
+}
+
+.msg-div>h5 {
+    grid-area: name;
+}
+
+.msg-div>p {
+    grid-area: msg;
+}
+
+.msg-div>h6 {
+    grid-area: date;
+}
+
+.my-msg {
+    align-self: flex-end;
+    background: #d9f442;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* name input custom width */
+section>.personal-info>.ant-input-search {
+    width: 50%;
+}
+
+/******/
+
+@media screen and (max-width: 500px) {
+
+    main aside {
+        display: none;
+    }
+
+    main {
+        grid-template-columns: 100%;
+    }
+
+    .personal-info {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    section>.personal-info>.ant-input-search {
+        width: 100%;
+    }
+
+    .personal-info>div {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+}
