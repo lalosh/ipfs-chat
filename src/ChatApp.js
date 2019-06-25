@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import './ChatApp.css';
 import { Button, Input, Drawer, Icon } from 'antd';
 import IPFSChat from './IPFSChat.js';
-// const IPFSChat = require('./IPFSChat.js')
 const { Search } = Input;
 let IPFSChatInstance = null;
 
@@ -14,21 +13,21 @@ class ChatApp extends React.Component {
             makeDrawer: false,
             myName: '',
             myID: '',
-            currentMsg: 'hello guys',
+            currentMsg: '',
             peers: [
-                { name: 'global', nodeid: 'jalifjalifj1' },
-                { name: 'anas', nodeid: 'jalifjalifj2' },
-                { name: 'moied', nodeid: 'jalifjalifj3' },
-                { name: 'mam', nodeid: 'jalifjalifj4' },
-                { name: '', nodeid: 'jalifjalifj5' },
+                // { name: 'global', nodeid: 'jalifjalifj1' },
+                // { name: 'anas', nodeid: 'jalifjalifj2' },
+                // { name: 'moied', nodeid: 'jalifjalifj3' },
+                // { name: 'mam', nodeid: 'jalifjalifj4' },
+                // { name: '', nodeid: 'jalifjalifj5' },
             ],
             selectedPeer: 'global',
             allMessages: {
                 'global': [
-                    { from: 'anas', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
-                    { from: 'memo', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
-                    { from: 'omar', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
-                    { from: 'mam', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
+                    // { from: 'anas', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
+                    // { from: 'memo', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
+                    // { from: 'omar', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
+                    // { from: 'mam', data: 'hello from anas', date: '2018-6-5 5:23 AM' },
                 ]
             }
         }
@@ -38,14 +37,28 @@ class ChatApp extends React.Component {
         this.saveMyName = this.saveMyName.bind(this);
         this.sendNewMessage = this.sendNewMessage.bind(this);
         this.changeMyID = this.changeMyID.bind(this);
-				
-				IPFSChatInstance = new IPFSChat(this.changeMyID);
+        this.handleNewPeers = this.handleNewPeers.bind(this);
+        this.receiveNewMsg = this.receiveNewMsg.bind(this);
+        this.mapNodeIDToName = this.mapNodeIDToName.bind(this);
+        this.handleNameComing = this.handleNameComing.bind(this);
+
+        IPFSChatInstance = new IPFSChat();
 
 
+        IPFSChatInstance.getID()
+            .then(myID => {
+                this.setState({ myID });
+            })
+            .then(() => {
+                IPFSChatInstance.newSubscribe('global', this.receiveNewMsg)
+				        IPFSChatInstance.newSubscribe('name-service', this.handleNameComing)
+            }); 
     }
-    changeMyID(id){
-    	this.setState({ myID: id });
+
+    changeMyID(id) {
+        this.setState({ myID: id });
     }
+
     colseDrawer() {
         this.setState({ visibleDrawer: false })
     }
@@ -64,32 +77,101 @@ class ChatApp extends React.Component {
     sendNewMessage(msg) {
         console.log('the msg', msg, 'has been sent fakly for now!');
     }
-    receiveNewMsg(sender, msg){
-    	if(sender && msg){
+    receiveNewMsg(msg) {
+        console.log('we have got this grate msg', msg.data.toString(), 'from', msg.from);
+									setTimeout(()=>{
+										let msgContainer = document.getElementsByClassName('msg-container')[0];
+										msgContainer.scrollTop = msgContainer.scrollHeight;
+									}, 200)
+									
+        this.setState(oldState => {
 
-    		this.setState(oldState => {
+            let newMessages = Object.assign({}, oldState.allMessages);
+            let currentDate = new Date();
+            let dateString = `${currentDate.getDate()}-${currentDate.getMonth()+1}-${currentDate.getFullYear()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
 
-    			let newAllMessages = Object.assign({}, oldState.allMessages);
-    			
-    			newAllMessages[sender].push({
-    				from: sender,
-    				data: msg,
-    				date: '2015-52-51 52:45 AM'
-    			});
-    			
-    			return {
-    				allMessages: newAllMessages
-    			}
+            newMessages['global'].push({
+                from: msg.from,
+                data: msg.data.toString(),
+                date: dateString
+            })
 
-    		});
+            return { allMessages: newMessages }
+        })
 
-    	}
     }
+    
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions.bind(this));
 
-        IPFSChatInstance.newSubscribe('global', this.receiveNewMsg)
+
+        try {
+            setInterval(async () => {
+
+                let peersComing = await IPFSChatInstance.getPeers('global')
+                if (peersComing && peersComing.length) {
+                    // peersComing = peersComing.map(peer => ({ name: '', nodeid: peer }));
+
+                    this.setState(oldState => {
+                    	if(oldState.peers.length == 0) 
+                    		return {
+                    			peers: peersComing.map(peerID => ({name: '', nodeid: peerID}))
+                    		}
+
+                    		
+                    	let existingPeers = oldState.peers.slice();
+                    	let existingPeersIDs = existingPeers.map(peer=>peer.nodeid);
+
+                    	peersComing.forEach(peerID=>{
+                    		if(existingPeersIDs.indexOf(peerID) == -1){
+                    			existingPeers.push({name: '', nodeid: peerID})
+                    		}
+                    	});
+
+                    	return {
+                    		peers: existingPeers
+                    	}
+
+                    })
+                }
+
+            }, 3000);
+        } catch (error) {
+            console.warn(error);
+        }
+
+        setInterval(()=>{
+        	if(this.state.myName){
+        		IPFSChatInstance.sendNewMsg('name-service', this.state.myName)
+        	}
+        },5000)
+
+    }
+    handleNameComing(msg){
+    	let senderID = msg.from;
+    	let senderName = msg.data.toString();
+    	console.warn('new name coming', senderName, senderID);
+
+    	this.setState(oldState => {
+    		let peers = oldState.peers.slice();
+    		peers.forEach(peer => {
+    			if(peer.name == '' && peer.nodeid == senderID){
+    				peer.name = senderName;
+    			}
+    		})
+    		return {peers}
+    	});
+    }
+    mapNodeIDToName(nodeid){
+    	let peers = this.state.peers;
+    	for (let i = peers.length - 1; i >= 0; i--) {
+    		if(peers[i]['nodeid'] == nodeid && peers[i]['name'].length > 0) return peers[i]['name']
+    	}
+    	return nodeid.slice(nodeid.length - 5 );
+    }
+    handleNewPeers(peers) {
+
     }
     render() {
         return (
@@ -99,7 +181,7 @@ class ChatApp extends React.Component {
 
 					<aside>
 
-						<h1> My Peers {this.state.selectedPeer} </h1>
+						<h1> My Peers {this.state.selectedPeer.slice(this.state.selectedPeer.length - 5)} </h1>
 
 						{this.state.makeDrawer ?
 								<Drawer
@@ -154,26 +236,42 @@ class ChatApp extends React.Component {
 						</div>
 
 						<div className='msg-container'>
-
-							<div className='msg-div'>
-								<h5>from</h5>
-								<p>hello from the from of the from oh hi oh hi</p>
-								<h6>25-12-2016 3:52AM</h6>
-							</div>
-
-							<div className='msg-div my-msg'>
-								<h5>from</h5>
-								<p>hello from the from of the from</p>
-								<h6>25-12-2016 3:52AM</h6>
-							</div>
-
+							{
+								this.state.allMessages['global'].length?
+								this.state.allMessages['global'].map((msg,index) => (
+									<div
+									 key={String(msg.from + Math.random())}
+									 className={msg.from === this.state.myID?'msg-div my-msg':'msg-div'}
+									>
+										{msg.from == this.state.myID ? 
+											<h5>{this.state.myName || this.state.myID.slice(this.state.myID.length - 5)}</h5>
+											:
+											<h5>{ this.mapNodeIDToName(msg.from) }</h5>
+										}
+										<p>{msg.data}</p>
+										<h6>{msg.date}</h6>
+									</div>
+									))
+								: null
+							}
 						</div>
 
 						<div>
 							<Search
 								placeholder="Type your message here ..."
 								enterButton="Send"
-								onSearch={value => console.log(value)}
+								value={this.state.currentMsg}
+								onChange={(event)=>this.setState({currentMsg: event.target.value})}
+								onSearch={value => {
+									IPFSChatInstance.sendNewMsg('global', value);
+									this.setState({currentMsg: ''});
+
+									setTimeout(()=>{
+										let msgContainer = document.getElementsByClassName('msg-container')[0];
+										msgContainer.scrollTop = msgContainer.scrollHeight;
+									}, 200)
+								
+								}}
 							/>
 						</div>
 
@@ -183,13 +281,31 @@ class ChatApp extends React.Component {
     }
 }
 
-const OtherPeers = ({ 
-	afterPeerClick,
-	peers,
-	selectedPeer,
-	changeSelectedPeer 
+const OtherPeers = ({
+    afterPeerClick,
+    peers,
+    selectedPeer,
+    changeSelectedPeer
 }) => (
-<div className='peers-ids-container'>
+    <div className='peers-ids-container'>
+    
+    <div
+			className={selectedPeer == 'global' ? 'selected-peer': ''}
+    >
+    	
+    	<p
+				onClick={()=>{
+					changeSelectedPeer('global')
+
+					if(afterPeerClick)
+					afterPeerClick()
+			}}>
+
+				{'global'}
+
+			</p>
+
+    </div>
 
 {
 	peers.length ?
@@ -208,7 +324,7 @@ const OtherPeers = ({
 			if(afterPeerClick)
 				afterPeerClick()
 		}}>
-			{peer.name || peer.nodeid}
+			{peer.name || peer.nodeid.slice(peer.nodeid.length - 5)}
 		</p>
 
 		</div>
