@@ -15,6 +15,7 @@ main {
 }
 
 /* other peers ids */
+
 aside {
     padding: 5px;
     height: 96vh;
@@ -42,17 +43,17 @@ aside>h1 {
     color: white;
 }
 
-.selected-peer{
-	background: crimson;
-	color: white;
+.selected-peer {
+    background: crimson;
+    color: white;
 }
 
 /*************/
+
 section {
     display: flex;
     flex-direction: column;
     padding: 5px;
-
 }
 
 section>* {
@@ -60,6 +61,7 @@ section>* {
 }
 
 /* personal information */
+
 .personal-info {
     padding: 10px;
     display: flex;
@@ -72,7 +74,6 @@ section>* {
     font-size: 18px;
 }
 
-
 /* Messages */
 
 .msg-container {
@@ -80,7 +81,6 @@ section>* {
     flex-direction: column;
     min-height: 75vh;
     max-height: 75vh;
-
     overflow-y: scroll;
     padding: 10px;
     background: lightgray;
@@ -89,15 +89,12 @@ section>* {
 .msg-div {
     display: grid;
     grid-template-areas: "name msg""date date";
-
     align-self: flex-start;
-
     padding: 10px;
     box-shadow: 5px 5px 5px gray;
     border-radius: 5px;
     margin: 5px 0;
     background: #41f4b8;
-
 }
 
 .msg-div>* {
@@ -122,26 +119,31 @@ section>* {
 }
 
 /* custom scroll bar */
+
 ::-webkit-scrollbar {
     width: 8px;
 }
 
 /* Track */
+
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 
 /* Handle */
+
 ::-webkit-scrollbar-thumb {
     background: #888;
 }
 
 /* Handle on hover */
+
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
 /* name input custom width */
+
 section>.personal-info>.ant-input-search {
     width: 50%;
 }
@@ -149,24 +151,19 @@ section>.personal-info>.ant-input-search {
 /******/
 
 @media screen and (max-width: 500px) {
-
     main aside {
         display: none;
     }
-
     main {
         grid-template-columns: 100%;
     }
-
     .personal-info {
         flex-direction: column;
         align-items: stretch;
     }
-
     section>.personal-info>.ant-input-search {
         width: 100%;
     }
-
     .personal-info>div {
         display: flex;
         justify-content: space-between;

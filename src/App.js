@@ -1,14 +1,14 @@
 import React from 'react';
-import './App.css';
+import ChatApp from './ChatApp';
+const App = () => <ChatApp/>;
+export default App;
+
 // import IPFS from 'ipfs';
 // import BufferPackage from 'buffer';
 // const Buffer = BufferPackage.Buffer;
 
-import ChatApp from './ChatApp';
-
 // let node = null;
 // const topic = 'global-topic';
-const App = () => <ChatApp/>;
 
 // class App extends React.Component {
 //   constructor(props) {
@@ -158,7 +158,6 @@ const App = () => <ChatApp/>;
 
 
 
-export default App;
 
 
 /*

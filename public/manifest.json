@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "IPFS Chat",
+  "name": "IPFS peer-to-peer distributed chat application",
   "icons": [
     {
       "src": "favicon.ico",
