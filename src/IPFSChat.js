@@ -48,13 +48,13 @@ function IPFSChat() {
 		return new Promise((resolve, reject) => {
 			if (!this.ready) reject('');
 
-			console.log('looking for peers');
+			// console.log('looking for peers');
 
 			node.pubsub.peers(topic, (error, peersIDs) => {
 				if (error) {
 					reject(`failed to get peers subscribed to ${topic}, ${error}`)
 				}
-				console.log('found these peers', peersIDs)
+				// console.log('found these peers', peersIDs)
 				resolve(peersIDs)
 			})
 

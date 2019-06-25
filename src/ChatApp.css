@@ -18,7 +18,7 @@ main {
 
 aside {
     padding: 5px;
-    height: 96vh;
+    height: 73vh;
 }
 
 aside>h1 {
@@ -27,27 +27,34 @@ aside>h1 {
 }
 
 .peers-ids-container {
-    height: 75vh;
+    height: 73vh;
     overflow-y: scroll;
 }
 
 .peers-ids-container>div {
     padding: 5px;
     margin: 0 5px;
-    border-bottom: 1px solid gray;
+    margin-bottom: 5px;
+    /*border-bottom: 1px solid gray;*/
 }
 
 .peers-ids-container>div:hover {
-    background: crimson;
+    background: #6bc8ff;
     cursor: pointer;
-    color: white;
 }
 
 .selected-peer {
-    background: crimson;
-    color: white;
+    background: #ade1ff;
+    font-size: 20px;
+    color: black;
+    border-radius: 5px;
 }
-
+.spin-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px 10px;
+}
 /*************/
 
 section {
@@ -79,26 +86,38 @@ section>* {
 .msg-container {
     display: flex;
     flex-direction: column;
-    min-height: 75vh;
-    max-height: 75vh;
+    min-height: 73vh;
+    max-height: 73vh;
     overflow-y: scroll;
     padding: 10px;
-    background: lightgray;
+    background: #ededed;
+
+/*    border: 1px solid lightgray;
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+*/
 }
 
 .msg-div {
     display: grid;
     grid-template-areas: "name msg""date date";
     align-self: flex-start;
-    padding: 10px;
+    padding: 2px 5px;
     box-shadow: 5px 5px 5px gray;
     border-radius: 5px;
     margin: 5px 0;
     background: #41f4b8;
+    background: #ffffff;
 }
+
+
 
 .msg-div>* {
     padding: 5px;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: black;
 }
 
 .msg-div>h5 {
@@ -111,11 +130,14 @@ section>* {
 
 .msg-div>h6 {
     grid-area: date;
+    font-size: 12px;
+    color: gray;
 }
 
 .my-msg {
     align-self: flex-end;
     background: #d9f442;
+    background: #cefffa;
 }
 
 /* custom scroll bar */
