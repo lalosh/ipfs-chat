@@ -3,6 +3,8 @@ import './ChatApp.css';
 import { Button, Input, Drawer, Icon, notification } from 'antd';
 import IPFSChat from './IPFSChat';
 import OtherPeers from './OtherPeers';
+import UploadFile from './UploadFile';
+import ReactHtmlParser from 'react-html-parser';
 
 const { Search } = Input;
 let IPFSChatInstance = null;
@@ -42,6 +44,7 @@ class ChatApp extends React.Component {
 		this.mapNodeIDToName = this.mapNodeIDToName.bind(this);
 		this.nameServiceHandler = this.nameServiceHandler.bind(this);
 		this.privateChatHandler = this.privateChatHandler.bind(this);
+		this.lastFive = this.lastFive.bind(this);
 
 		IPFSChatInstance = new IPFSChat();
 
@@ -107,7 +110,7 @@ class ChatApp extends React.Component {
 		let senderID = msg.from;
 		let data = msg.data.toString();
 		let receiverID = data.split(':')[0];
-		let theMsg = data.split(':')[1];
+		let theMsg = data.slice(data.split(':')[0].length+1)
 		
 		const {myID} = this.state;
 
@@ -184,6 +187,7 @@ class ChatApp extends React.Component {
 		}, 200)
 	}
 	globalMsgHandler(msg) {
+		// console.log('globalMsgHandler received', msg.data.toString(), 'from', msg.from)
 		this.scrollDownTheMsgs();
 
 		this.setState(oldState => {
@@ -227,6 +231,11 @@ class ChatApp extends React.Component {
 			if (peers[i]['nodeid'] == nodeid && peers[i]['name'].length > 0) return peers[i]['name']
 		}
 		return nodeid;;
+	}
+	lastFive(string){
+		if(string.length > 5){
+			return string.slice(string.length - 5);
+		} else return string;
 	}
 
 	render() {
@@ -294,7 +303,7 @@ class ChatApp extends React.Component {
 							onSearch={value => this.saveMyName(value)}
 						/>
 						:
-						<p>{myName}</p>
+						<p className='my-name'>{myName}</p>
 					}
 
 				</div>
@@ -313,11 +322,14 @@ class ChatApp extends React.Component {
 										msg.from == myID ?
 										<h5>{myName || myID.slice(myID.length - 5)}</h5>
 										:
+										this.mapNodeIDToName(msg.from) == msg.from?
+										<h5>{this.lastFive(msg.from)}</h5>
+										:
 										<h5>{this.mapNodeIDToName(msg.from)}</h5>
 										:
 										null
 									}
-									<p>{msg.data}</p>
+									<p>{ReactHtmlParser(msg.data)}</p>
 									<h6>{msg.date}</h6>
 								</div>
 							))
@@ -325,6 +337,11 @@ class ChatApp extends React.Component {
 					}
 				</div>
 
+				<UploadFile
+					ipfsNode={IPFSChatInstance}
+					selectedPeer={selectedPeer}
+				/>
+				
 				<div>
 					<Search
 						autoFocus

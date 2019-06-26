@@ -22,7 +22,7 @@ const OtherPeers = ({
 				<p
 					>
 
-					{'Global Chat'}
+					{'Global chat'}
 
 				</p>
 

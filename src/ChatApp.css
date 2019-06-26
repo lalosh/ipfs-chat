@@ -191,4 +191,7 @@ section>.personal-info>.ant-input-search {
         justify-content: space-between;
         margin-bottom: 10px;
     }
+    p.my-name{
+        text-align: center;
+    }
 }

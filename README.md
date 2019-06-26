@@ -1,3 +1,36 @@
+# Distributed peer-to-peer chat client(in browser) using IPFS(InterPlanetary File System) protocol
+
+Worked on this project with a friend: Alfarouq Omar Mardini @github/2bo3mEeEer
+
+The client can be served now at this link: https://ipfs-chat.herokuapp.com/
+
+
+# Peer(client) Architecture
+
+This peer application is built using **React** and it need no server to connect through, totally distributed between peers, yet have to have a gateway to make peers discover each others and that's the only central thing this peer use.
+
+## Features
+  - [x] can send message in a global chat room
+  - [x] can send message in a private chat rooms
+  - [x] can send files(adding them to the IPFS node and sending the link to the peers)
+
+## Missing Features
+  - [ ] direct private room between the peers
+  - [ ] private files sending between peers
+
+
+**Sending Messages**
+
+The peers send text messages to each others by using the publish/subscribe communication pattern which is considered an experimental feature in IPFS so far(using IPFS@0.35.0).
+
+**Sending Files**
+
+Sending Files depends on IPFS node add file API, adding the file, getting the hash value of that file after being added to the IPFS node, sending the hash after forming the public link(by adding https://ipfs.io/ipfs/${hash}) forming a public link dependent on the IPFS public gateway to access the file and get assured that the file is uploaded successfully to the IPFS world.
+
+
+
+-----------------------------
+
 This project is based on IPFS (InterPlanetary File System), so we make a full study of IPFS then use its implementation for building the distributed peer-to-peer chat application.
 
 # Abstract
