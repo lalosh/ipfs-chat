@@ -17,9 +17,9 @@ export const useMessagesPanelStyles = makeStyles({
         position: 'relative',
     }, 
     time:{
-        position: 'absolute',
-        bottom: '10px',
-        right: '15px'
+        // position: 'absolute',
+        // bottom: '10px',
+        // right: '15px'
     },
     left: {
         alignSelf: 'flex-start',

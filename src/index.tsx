@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { RootComponent } from './root/root.component';
-
+import { RootContainer } from './root/root.container';
+import { Provider } from 'react-redux';
+import { store } from './state/store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RootComponent />
+    <Provider store={store}>
+      <RootContainer />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
