@@ -4,7 +4,7 @@ import { MessagePanelContainer } from "../components/messages-panel/messages-pan
 import { SideNav } from "../components/side-nav/side-nav";
 import { useRootStyles } from "./root.style";
 import { LogoContainer } from '../components/logo/logo';
-import { ProfileAndSearch } from '../components/profile-and-search/profile-and-search';
+import { ProfileAndSearchContainer } from '../components/profile-and-search/profile-and-search.container';
 import { ReceiverSectionContainer } from '../components/receiver-section/receiver-section.container';
 import { RootComponentProps } from "./root.type";
 import { useEffect } from "react";
@@ -21,18 +21,11 @@ export function RootComponent(props: RootComponentProps) {
         initIPFS({});
     }, []);
 
-    const [name, setName] = useState('');
-
-    function setNodeName() {
-        setMyName({ name });
-    }
 
     return (
         <div className={classes.root}>
 
             <div className={classes.topNavContainer}>
-                <input placeholder="my name" value={name} onChange={e => setName(e.target.value)} />
-                <button onClick={setNodeName}>{'save'}</button>
             </div>
 
 
@@ -41,7 +34,7 @@ export function RootComponent(props: RootComponentProps) {
             </div>
 
             <div className={classes.profileAndSearch}>
-                <ProfileAndSearch />
+                <ProfileAndSearchContainer />
             </div>
 
             <div className={classes.receiverContainer}>

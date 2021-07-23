@@ -1,19 +1,17 @@
-import { take, call, put, select } from 'redux-saga/effects';
+import { take, put } from 'redux-saga/effects';
 import { INIT_IPFS } from '../actions/init-ipfs';
 import IPFS from 'ipfs';
-import { setIPFS } from '../actions/set-ipfs';
 import { setNodeID } from '../actions/set-node-id';
 import { addFriend } from '../actions/add-friend';
 import { store } from '../store';
-import { RootState } from '../reducers/root.reducer';
 import { NODE_ID } from '../../types/node-id.type';
 import { receiveMessage } from '../actions/receive-message';
+
 
 export let MY_IPFS_NODE: any = null;
 export const isIPFSReady = () => Boolean(MY_IPFS_NODE);
 export const NAMES_WORKSPACE = 'NAMES_WORKSPACE';
 export const MESSAGES_WORKSPACE = 'MESSAGES_WORKSPACE';
-
 
 
 export function* initIpfsEffect(): any {
@@ -40,9 +38,9 @@ export function* initIpfsEffect(): any {
 
             const nodeID: NODE_ID = yield (MY_IPFS_NODE.id());
 
-
             yield put(setNodeID({ nodeID }));
 
+            /////////
 
             // get friends names
             yield MY_IPFS_NODE.pubsub.subscribe(NAMES_WORKSPACE, function addFriendHandler(message: any) {

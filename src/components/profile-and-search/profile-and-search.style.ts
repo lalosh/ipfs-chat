@@ -24,5 +24,14 @@ export const useProfileAndSearchStyles = makeStyles({
         alignItems: 'center',
         padding: '10px',
     },
+    formContainer: {
+        padding: '20px 0',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    nameInput:{
+        margin: '20px 0'
+    },
 
 });
