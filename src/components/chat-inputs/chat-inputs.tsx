@@ -7,8 +7,16 @@ import { useCallback } from 'react';
 import { addFileContentToIPFS, cidToBlobLinks } from '../../utils/ipfs-utils';
 import { MY_IPFS_NODE } from '../../state/effects/init-ipfs.effect';
 import { FileMessageObject } from '../../state/reducers/messages.reducer';
+import MicIcon from '@material-ui/icons/Mic';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 import { useRef } from 'react';
+import moment from 'moment';
+import { useEffect } from 'react';
+import { SendMessageAction } from '../../state/actions/send-message';
 declare var MediaRecorder: any;
 
 export function ChatsInputs(props: ChatInputsProps) {
@@ -17,7 +25,13 @@ export function ChatsInputs(props: ChatInputsProps) {
     const classes = useChatInputStyles();
     const [inputValue, setInputValue] = useState('');
     const [blobUrl, setBlobUrl] = useState('');
+
     const stopButtonRef = useRef<HTMLButtonElement>(null);
+    const deleteButtonRef = useRef<HTMLButtonElement>(null);
+
+    const [isRecording, setIsRecording] = useState(false);
+    const fileInputRef = useRef<any>(null);
+    const imageInputRef = useRef<any>(null);
 
 
 
@@ -102,13 +116,20 @@ export function ChatsInputs(props: ChatInputsProps) {
 
     }
 
-    function startRecording() {
 
+    function sendVoice(params: Omit<SendMessageAction, "type">) {
+        sendMessage(params);
+    }
+
+    function startRecording() {
         navigator
             .mediaDevices
             .getUserMedia({ audio: true, video: false })
             .then(function (stream) {
-           
+
+                setIsRecording(true);
+
+
                 const options = { mimeType: 'audio/webm' };
                 const recordedChunks: any = [];
                 const mediaRecorder = new MediaRecorder(stream, options);
@@ -117,41 +138,54 @@ export function ChatsInputs(props: ChatInputsProps) {
                     if (e.data.size > 0) recordedChunks.push(e.data);
                 });
 
-                mediaRecorder.addEventListener('stop',async function onStop() {
+                async function onStopRecording() {
 
                     const newBlob = URL.createObjectURL(new Blob(recordedChunks));
                     setBlobUrl(newBlob);
 
-                    console.log({recordedChunks})
+
 
                     const cid = await addFileContentToIPFS({
                         ipfsNode: MY_IPFS_NODE,
                         content: recordedChunks[0],
                         path: 'audio'
                     });
-        
-        
+
+
                     const fileObject: FileMessageObject = {
                         cid,
                         fileName: 'some-audio.webm',
                         fileType: 'wav'
                     }
 
-                    console.log({cid})
-        
-                    sendMessage({
+
+
+                    sendVoice({
                         from: myNodeId,
                         to: selectedFriendId,
                         message: JSON.stringify(fileObject),
                         messageType: 'voice'
                     });
-        
 
-                });
+
+                }
+
+                mediaRecorder.addEventListener('stop', onStopRecording);
 
                 if (stopButtonRef && stopButtonRef.current)
                     stopButtonRef?.current?.addEventListener('click', function onStopClick() {
                         mediaRecorder.stop();
+                        setIsRecording(false);
+                        this.removeEventListener('click', onStopClick)
+                    });
+
+                if (deleteButtonRef && deleteButtonRef.current)
+                    deleteButtonRef?.current?.addEventListener('click', function onStopClick() {
+
+                        mediaRecorder.removeEventListener('stop', onStopRecording)
+                        mediaRecorder.stop();
+                        setIsRecording(false);
+
                         this.removeEventListener('click', onStopClick)
                     });
 
@@ -161,42 +195,116 @@ export function ChatsInputs(props: ChatInputsProps) {
 
     }
 
+    if(!selectedFriendId) return null;
+
     return (
         <div className={classes.root}>
+
+            <IconButton
+                onClick={() => {
+                    if (fileInputRef && fileInputRef.current)
+                        fileInputRef.current.click()
+                }}
+            >
+                <AttachFileIcon />
+            </IconButton>
+
+            <IconButton
+                onClick={() => {
+                    if (imageInputRef && imageInputRef.current)
+                        imageInputRef.current.click()
+                }}
+            >
+                <PermMediaIcon />
+            </IconButton>
+
+
             <input
+                onKeyUp={(event) => {
+                    if (event.key == 'Enter') {
+                        sendMessageHandler()
+                    }
+                }}
                 value={inputValue}
                 onChange={updateInputValue}
                 className={classes.messageInput}
                 placeholder="Write your message here"
             />
-            <button onClick={startRecording}>{'rec'}</button>
-            <button ref={stopButtonRef}>{'stop'}</button>
-            <a download="file.wav" href={blobUrl}>{'download audio'}</a>
+
             {
-                blobUrl ?
-                    <audio id="player" src={blobUrl} controls></audio>
+                !isRecording ?
+                    <IconButton onClick={startRecording}>
+                        <MicIcon />
+                    </IconButton>
                     :
-                    null
+                    <>
+                        <IconButton ref={deleteButtonRef} >
+                            <DeleteSweepIcon />
+                        </IconButton>
+
+                        <RecordingTimer />
+
+                        <IconButton ref={stopButtonRef}>
+                            <CheckCircleOutlineIcon />
+                        </IconButton>
+                    </>
             }
 
-            {/* <input type="file" accept="audio/*" capture/> */}
 
-            {/* 
-            <input
-                type="file"
-                onChange={onFileChange}
-            />
 
-            <div>
-                <span>{'image'}</span>
+
+
+            <div style={{ display: 'none' }}>
+
                 <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={onFileChange}
+                />
+
+                <input
+                    ref={imageInputRef}
                     type="file"
                     onChange={onImageChange}
                 />
-            </div> */}
+            </div>
+
             <IconButton onClick={sendMessageHandler}>
                 <SendIcon />
             </IconButton>
         </div>
     );
+}
+
+
+function RecordingTimer() {
+
+
+    const [time, setTime] = useState(moment());
+    const [startTime, setStartTime] = useState(moment());
+
+    useEffect(() => {
+
+        setStartTime(moment());
+        setTime(moment());
+
+        let token = setInterval(() => {
+            setTime(moment())
+        }, 1000);
+
+        return () => {
+            clearInterval(token);
+            setTime(moment());
+        }
+    }, []);
+
+    return (
+        <span>
+            {
+                time.diff(startTime, 'minutes')
+            }:{
+                time.diff(startTime, 'seconds')
+            }
+        </span>
+    )
 }

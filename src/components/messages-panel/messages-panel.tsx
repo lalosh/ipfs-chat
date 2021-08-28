@@ -100,14 +100,8 @@ function RenderVoiceMessage({ message }: { message: MessageObject }) {
 
     return (
         <>
-            {/* <a
-                download={fileName}
-                href={blobUrl}
-            >
-                {fileName}
-            </a> */}
 
-            <audio src={blobUrl}  controls></audio>
+            <audio src={blobUrl} controls></audio>
 
 
             <Typography variant="caption" color="textSecondary" className={classes.time}>
@@ -144,17 +138,11 @@ function RenderImageMessage({ message }: { message: MessageObject }) {
 
     return (
         <>
-            {/* <a
-                download={fileName}
-                href={blobUrl}
-            >
-                {fileName}
-            </a> */}
 
             <img
                 src={blobUrl}
                 alt={fileName}
-                style={{ maxWidth: '200px' }}
+                style={{ maxWidth: '100%', maxHeight: '40vh' }}
             />
 
 

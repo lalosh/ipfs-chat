@@ -6,13 +6,17 @@ export const useChatInputStyles = makeStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '10px 20px',
+        background: "#edfff9",
+        boxShadow: "0px -2px 4px #dedede",
+        marginLeft: "2px"
     },
     messageInput: {
-        flexGrow: 1,
+        border: "2px solid #6d7572",
         padding: "10px",
-        borderRadius: "25px",
-        border: "2px solid #a0a0a0",
-        '&:focus':{
+        flexGrow: 1,
+        borderRadius: "6px",
+        color: "#3c3c3c",
+        '&:focus': {
             outline: 'none'
         }
     },

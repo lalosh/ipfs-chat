@@ -15,7 +15,7 @@ export function ContactsList(props: ContactsListProps) {
     return (
         <div className={classes.root}>
 
-            <Typography className={classes.title}>{'Messages'}</Typography>
+            {/* <Typography className={classes.title}>{'Messages'}</Typography> */}
 
 
             <div className={classes.listContainer}>
@@ -56,7 +56,7 @@ export function ContactsList(props: ContactsListProps) {
                                             ''
                                     }
                                 </Typography>
-                                <div className={classes.isOnline}></div>
+                                {/* <div className={classes.isOnline}></div> */}
                             </div>
                         </div>
                     ))

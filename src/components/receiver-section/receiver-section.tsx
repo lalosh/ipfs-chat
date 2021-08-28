@@ -4,17 +4,29 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useReceiverContainerStyles } from './receiver-section.style';
 import { ReceiverSectionProps } from './receiver-section.type';
+import MenuIcon from '@material-ui/icons/Menu';
 
 
 export function ReceiverSection(props: ReceiverSectionProps) {
 
-    const { receiverName, lastSeen } = props;
+    const { receiverName, lastSeen, openDrawer, showOpenButton } = props;
     const classes = useReceiverContainerStyles();
 
     return (
         <div className={classes.root}>
 
+
+
             <div className={classes.receiverContainer}>
+                {
+                    showOpenButton ?
+                        <IconButton onClick={openDrawer}>
+                            <MenuIcon />
+                        </IconButton>
+                        :
+                        null
+                }
+
                 <IconButton>
                     <AccountCircleIcon fontSize="large" />
                 </IconButton>
@@ -25,9 +37,7 @@ export function ReceiverSection(props: ReceiverSectionProps) {
             </div>
 
             <div className={classes.iconsContainer}>
-                <IconButton>
-                    <PhoneIcon />
-                </IconButton>
+                {/* <input /> */}
                 <IconButton>
                     <MoreVertIcon />
                 </IconButton>

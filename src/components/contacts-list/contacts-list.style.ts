@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core";
 export const useContactsListStyles = makeStyles({
     root: {
         padding: '10px',
+        maxHeight: '90vh',
+        overflow: 'auto',
     },
 
     listContainer: {
@@ -20,9 +22,10 @@ export const useContactsListStyles = makeStyles({
         }
     },
     activeItem: {
-        borderRadius: "10px",
-        background: "linear-gradient( 90deg, #f2d82680, #1afffe66)",
-        boxShadow: "0 0 5px #c9c9c9"
+        background: "#75d1b4",
+        boxShadow: "0 0 3px #c9c9c9",
+        borderRadius: "4px",
+        transition: 'all 0.5s ease-out',
     },
     nameAndMessage: {
         flexGrow: 1,

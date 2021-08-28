@@ -23,7 +23,7 @@ export function ProfileAndSearch(props: ProfileAndSearchProps) {
     return (
         <>
 
-            <Dialog open={dialogOpenState} onClose={dialogCloseHandler}>
+            <Dialog open={dialogOpenState && !myName} onClose={dialogCloseHandler}>
                 <DialogTitle>
                     <Typography>
                         <IconButton>
@@ -54,15 +54,9 @@ export function ProfileAndSearch(props: ProfileAndSearchProps) {
 
             <div className={classes.root}>
 
-                <input
-                    className={classes.searchInput}
-                    type="text"
-                    placeholder="Search messages"
-                />
-
                 <div className={classes.myNameContainer}>
-                    <Typography variant="h6">
-                        {myName || 'Click to change my name'}
+                    <Typography variant="caption">
+                        {myName || ''}
                     </Typography>
                     <IconButton onClick={() => setDialogOpenState(true)}>
                         <AccountCircleIcon fontSize="large" />

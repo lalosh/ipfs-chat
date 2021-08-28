@@ -4,7 +4,7 @@ export const useLogoStyles = makeStyles({
 
     root: {
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         height: '100%'
     },

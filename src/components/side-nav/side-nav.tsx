@@ -9,33 +9,34 @@ export function SideNav() {
 
     const classes = useSideNavStyles();
 
-    return (
-        <div className={classes.root}>
-            <div className={classes.item}>
-                <IconButton>
-                    <MessageIcon fontSize="large" />
-                </IconButton>
-                <Typography>{'Messages'}</Typography>
-            </div>
-            <div className={classes.item}>
-                <IconButton>
-                    <PhoneIcon fontSize="large" />
-                </IconButton>
-                <Typography>{'Calls'}</Typography>
-            </div>
-            <div className={classes.item}>
-                <IconButton>
-                    <DonutLargeIcon fontSize="large" />
-                </IconButton>
-                <Typography>{'Status'}</Typography>
-            </div>
-            <div className={classes.item}>
-                <IconButton>
-                    <SettingsIcon fontSize="large" />
-                </IconButton>
-                <Typography>{'Setting'}</Typography>
-            </div>
+    return (<></>)
+    // return (
+    //     <div className={classes.root}>
+    //         <div className={classes.item}>
+    //             <IconButton>
+    //                 <MessageIcon fontSize="large" />
+    //             </IconButton>
+    //             <Typography>{'Messages'}</Typography>
+    //         </div>
+    //         <div className={classes.item}>
+    //             <IconButton>
+    //                 <PhoneIcon fontSize="large" />
+    //             </IconButton>
+    //             <Typography>{'Calls'}</Typography>
+    //         </div>
+    //         <div className={classes.item}>
+    //             <IconButton>
+    //                 <DonutLargeIcon fontSize="large" />
+    //             </IconButton>
+    //             <Typography>{'Status'}</Typography>
+    //         </div>
+    //         <div className={classes.item}>
+    //             <IconButton>
+    //                 <SettingsIcon fontSize="large" />
+    //             </IconButton>
+    //             <Typography>{'Setting'}</Typography>
+    //         </div>
 
-        </div>
-    );
+    //     </div>
+    // );
 }

@@ -1,32 +1,34 @@
 import { makeStyles } from "@material-ui/core";
 
 export const useMessagesPanelStyles = makeStyles({
-    root:{
+    root: {
         display: 'flex',
         flexDirection: 'column',
         padding: '20px',
         maxHeight: '79vh',
         overflow: 'auto'
     },
-    message:{
+    message: {
         background: '#ddd',
-        borderRadius: '10px',
+        borderRadius: '5px',
         padding: '10px',
         maxWidth: '55%',
+        minWidth: '200px',
         margin: '5px 0',
         position: 'relative',
-    }, 
-    time:{
+    },
+    time: {
         // position: 'absolute',
         // bottom: '10px',
         // right: '15px'
+        color: '#676767',
     },
     left: {
         alignSelf: 'flex-start',
-        background: '#f1d82787',
+        background: '#ffe31f',
     },
     right: {
         alignSelf: 'flex-end',
-        background: '#20fef73b',
+        background: '#86DE28',
     },
 });
