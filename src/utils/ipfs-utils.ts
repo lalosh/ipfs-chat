@@ -42,6 +42,8 @@ export async function cidToBlobLinks({ cid, ipfsNode }: { cid: string, ipfsNode:
                 content.push(chunk)
             }
 
+            console.log({ content })
+
             let blobsResults = content.map(chunk => new Blob([new Uint8Array(chunk).buffer]));
             let blobsLinks = blobsResults.map(blob => window.URL.createObjectURL(blob));
 
@@ -67,5 +69,5 @@ export async function addFileContentToIPFS({ path, content, ipfsNode }: { path: 
         content,
     }
 
-    return await ipfsNode.add(file).cid;
+    return (await ipfsNode.add(file)).cid.toString();
 }

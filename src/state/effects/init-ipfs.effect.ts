@@ -5,7 +5,8 @@ import { setNodeID } from '../actions/set-node-id';
 import { addFriend } from '../actions/add-friend';
 import { store } from '../store';
 import { NODE_ID } from '../../types/node-id.type';
-import { receiveMessage } from '../actions/receive-message';
+import { receiveMessage, ReceiveMessageAction } from '../actions/receive-message';
+import { SendMessageAction } from '../actions/send-message';
 
 
 export let MY_IPFS_NODE: any = null;
@@ -54,12 +55,24 @@ export function* initIpfsEffect(): any {
 
 
             yield MY_IPFS_NODE.pubsub.subscribe(MESSAGES_WORKSPACE, function receiveMessageHandler(message: any) {
+
+                var audio = new Audio('/audio/receive.mp3');
+                audio.play();
+
+
                 const data = new TextDecoder().decode(message.data);
-                const parsedData: any = JSON.parse(data);
                 const from = message.from;
 
-                if (nodeID.id == parsedData.to)
-                    store.dispatch(receiveMessage({ from, to: nodeID.id, message: parsedData.message }));
+                const parsedMessage: Omit<ReceiveMessageAction, "type" | "from"> = JSON.parse(data);
+
+                if (nodeID.id == parsedMessage.to)
+
+                    store.dispatch(receiveMessage({
+                        messageType: parsedMessage.messageType,
+                        from,
+                        to: nodeID.id,
+                        message: parsedMessage.message
+                    }));
             });
 
 

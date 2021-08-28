@@ -1,4 +1,5 @@
 import { AppActionCreator } from "../../types/actions.type";
+import { MessageType } from "../reducers/messages.reducer";
 
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 
@@ -7,6 +8,7 @@ export interface SendMessageAction {
     from: string,
     to: string,
     message: string,
+    messageType: MessageType
 }
 
 export type SendMessageActionCreator = AppActionCreator<SendMessageAction>;

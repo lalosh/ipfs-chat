@@ -10,7 +10,9 @@ export function* setMyNameEffect(): any {
             const { name }: SetMyNameAction = yield take(SET_MY_NAME);
 
             const myName = new TextEncoder().encode(name)
-            yield MY_IPFS_NODE.pubsub.publish(NAMES_WORKSPACE, myName);
+
+            if (MY_IPFS_NODE)
+                yield MY_IPFS_NODE.pubsub.publish(NAMES_WORKSPACE, myName);
 
 
             /**
@@ -18,7 +20,9 @@ export function* setMyNameEffect(): any {
              * we re-send our name to be saved at other nodes
              */
             setInterval(function reSetMyName() {
-                MY_IPFS_NODE.pubsub.publish(NAMES_WORKSPACE, myName);
+                console.log('publishing name...')
+                if (MY_IPFS_NODE)
+                    MY_IPFS_NODE.pubsub.publish(NAMES_WORKSPACE, myName);
             }, 5000);
 
         } catch (error) {

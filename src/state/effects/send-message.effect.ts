@@ -5,11 +5,12 @@ import { MESSAGES_WORKSPACE, MY_IPFS_NODE } from "./init-ipfs.effect";
 export function* sendMessageEffect(): any {
 
     while (true) {
-        const { from, to, message }: SendMessageAction = yield take(SEND_MESSAGE);
+        const { from, to, message, messageType }: SendMessageAction = yield take(SEND_MESSAGE);
 
         const data = new TextEncoder().encode(JSON.stringify({
             message,
-            to
+            to,
+            messageType
         }));
 
         yield MY_IPFS_NODE.pubsub.publish(MESSAGES_WORKSPACE, data)

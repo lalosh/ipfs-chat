@@ -38,7 +38,12 @@ export function ContactsList(props: ContactsListProps) {
                             <div className={classes.nameAndMessage}>
                                 <Typography>{friends[friendId]}</Typography>
                                 <Typography color="textSecondary" variant="caption">
-                                    {messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.message ?? '...'}
+                                    {
+                                        messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'text' ?
+                                            messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.message ?? '...'
+                                            :
+                                            'file'
+                                    }
                                 </Typography>
                             </div>
 
