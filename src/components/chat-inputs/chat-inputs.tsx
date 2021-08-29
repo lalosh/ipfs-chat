@@ -18,7 +18,7 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { SendMessageAction } from '../../state/actions/send-message';
 declare var MediaRecorder: any;
-import {Composition} from 'atomic-layout';
+import { Composition } from 'atomic-layout';
 
 
 
@@ -200,12 +200,12 @@ export function ChatsInputs(props: ChatInputsProps) {
 
     }
 
-    if(!selectedFriendId) return null;
+    if (!selectedFriendId) return null;
 
     return (
         <Composition
-        className={classes.root}
-        templateCols={`auto auto 1fr auto auto`}
+            className={classes.root}
+            templateCols={`auto auto 1fr auto auto`}
         >
 
             <IconButton
@@ -271,6 +271,7 @@ export function ChatsInputs(props: ChatInputsProps) {
                 />
 
                 <input
+                    accept="image/*"
                     ref={imageInputRef}
                     type="file"
                     onChange={onImageChange}

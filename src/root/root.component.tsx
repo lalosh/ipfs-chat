@@ -1,50 +1,56 @@
 import { ChatInputsContainer } from "../components/chat-inputs/chat-inputs.container";
 import { ContactsListContainer } from "../components/contacts-list/contacts-list.container";
 import { MessagePanelContainer } from "../components/messages-panel/messages-panel.container";
-import { SideNav } from "../components/side-nav/side-nav";
 import { useRootStyles } from "./root.style";
 import { LogoContainer } from '../components/logo/logo';
-import { ProfileAndSearchContainer } from '../components/profile-and-search/profile-and-search.container';
 import { ReceiverSectionContainer } from '../components/receiver-section/receiver-section.container';
 import { RootComponentProps } from "./root.type";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-
 import { Composition } from 'atomic-layout'
 import { Drawer, useMediaQuery } from "@material-ui/core";
+import clsx from "clsx";
+
+
+
+
 
 export function RootComponent(props: RootComponentProps) {
 
-    const { initIPFS, setMyName, messages } = props;
+    const { initIPFS, messages } = props;
     const classes = useRootStyles();
+
     const [openDrawer, setOpenDrawer] = useState(false);
+
     const messagesContainerRef = useRef<any>(null);
 
-    useEffect(() => {
+    const isSmallScreen = useMediaQuery('(max-width: 768px)')
+
+
+
+    useEffect(function scrollToBottom() {
         if (messagesContainerRef && messagesContainerRef.current) {
             setTimeout(() => {
                 messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
             }, 0);
         }
-    }, [messages])
+    }, [messages]);
 
-    useEffect(() => {
+
+
+    useEffect(function onStart() {
         initIPFS({});
     }, []);
 
-    const isSmallScreen = useMediaQuery('(max-width: 768px)')
 
-    const chatInputs = <ChatInputsContainer />;
+
+
 
     if (isSmallScreen) {
 
         return (
             <>
-                <div style={{ display: 'none' }}>
-                    <LogoContainer />
-                </div>
 
-                {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
 
                 <Drawer
                     anchor={'left'}
@@ -56,20 +62,11 @@ export function RootComponent(props: RootComponentProps) {
                         height="100vh"
                         width="80vw"
                     >
-                        <div
-                            style={{
-                                background: '#27d29b'
-                            }}
-                        >
+                        <div className={classes.logoContainer}>
                             <LogoContainer />
                         </div>
 
-                        <div
-                            style={{
-
-                                boxShadow: '#cecece 3px 0px 3px'
-                            }}
-                        >
+                        <div className={classes.contactsListContainer}>
                             <ContactsListContainer
                                 drawerCloseHandler={() => setOpenDrawer(false)}
                             />
@@ -84,39 +81,29 @@ export function RootComponent(props: RootComponentProps) {
                     maxHeight={'100vh'}
                 >
 
-                    <div
-                        style={{
-                            background: '#27d29b'
-                        }}
-                    >
+                    <div className={classes.logoContainer} >
                         <LogoContainer />
                     </div>
-                    <div
-                        style={{
-                            background: "#27d29b",
-                            filter: "grayscale(0.4)"
-                        }}
-                    >
+
+                    <div className={classes.receiverSectionContainer}>
                         <ReceiverSectionContainer
                             openDrawer={() => setOpenDrawer(true)}
                             showOpenButton={isSmallScreen}
                         />
                     </div>
 
-                    <div>
-                        <Composition
-                            height="100%"
-                            maxHeight={'calc(100vh - 140px)'}
-                            templateRows={'1fr auto'}
-                        >
-                            <div style={{ overflow: 'auto', }} ref={messagesContainerRef}>
-                                <MessagePanelContainer />
-                            </div>
+                    <Composition
+                        height="100%"
+                        maxHeight={'calc(100vh - 140px)'}
+                        templateRows={'1fr auto'}
+                    >
+                        <div className={classes.overflowAuto} ref={messagesContainerRef}>
+                            <MessagePanelContainer />
+                        </div>
 
-                            {chatInputs}
+                        <ChatInputsContainer />
 
-                        </Composition>
-                    </div>
+                    </Composition>
 
                 </Composition>
 
@@ -133,9 +120,9 @@ export function RootComponent(props: RootComponentProps) {
             maxHeight="100vh"
             width="100vw"
             areas={`
-        identity receiver
-        contacts messages
-        `}
+                    identity receiver
+                    contacts messages
+                `}
         >
 
             {
@@ -146,20 +133,10 @@ export function RootComponent(props: RootComponentProps) {
                     Messages
                 }) => (
                     <>
-                        <Identity
-                            style={{
-                                background: '#27d29b'
-                            }}
-                        >
+                        <Identity className={classes.logoContainer}>
                             <LogoContainer />
                         </Identity>
-                        <Receiver
-                            style={{
-                                background: "#27d29b",
-                                borderLeft: "2px solid white",
-                                filter: "grayscale(0.4)"
-                            }}
-                        >
+                        <Receiver className={clsx(classes.receiverSectionContainer, classes.borderLeftForReceiver)}>
 
                             <ReceiverSectionContainer
                                 openDrawer={() => setOpenDrawer(true)}
@@ -167,11 +144,7 @@ export function RootComponent(props: RootComponentProps) {
                             />
 
                         </Receiver>
-                        <Contacts
-                            style={{
-                                boxShadow: '#cecece 3px 0px 3px'
-                            }}
-                        >
+                        <Contacts className={classes.contactsList}>
 
                             <ContactsListContainer
                                 drawerCloseHandler={() => setOpenDrawer(false)}
@@ -179,16 +152,14 @@ export function RootComponent(props: RootComponentProps) {
 
 
                         </Contacts>
-                        <Messages
-                            style={{ overflow: 'auto' }}
-                        >
+                        <Messages className={classes.overflowAuto}>
                             <Composition
                                 height="100%"
                                 templateRows={'1fr auto'}
                             >
 
                                 <MessagePanelContainer />
-                                {chatInputs}
+                                <ChatInputsContainer />
 
                             </Composition>
                         </Messages>

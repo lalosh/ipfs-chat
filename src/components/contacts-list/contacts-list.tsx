@@ -58,8 +58,13 @@ export function ContactsList(props: ContactsListProps) {
                                         messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'text' ?
                                             messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.message ?? '...'
                                             :
-                                            messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'file' ?
-                                                'file'
+                                            (
+                                                messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'file' ||
+                                                messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'image' ||
+                                                messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'voice'
+                                            )
+                                                ?
+                                                'File'
                                                 :
                                                 ''
                                     }

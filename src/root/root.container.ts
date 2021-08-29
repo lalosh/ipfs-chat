@@ -14,7 +14,12 @@ function mapStateToProps(state: RootState) {
 
 const mapActionToProps = {
     initIPFS,
-    setMyName
 }
 
-export const RootContainer = connect(mapStateToProps, mapActionToProps)(RootComponent)
+export const RootContainer =
+    connect(
+        mapStateToProps,
+        mapActionToProps
+    )(
+        RootComponent
+    );

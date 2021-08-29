@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useProfileAndSearchStyles } from './profile-and-search.style';
 import { ProfileAndSearchProps } from './profile-and-search.type';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-
+import { Composition } from 'atomic-layout';
 
 export function ProfileAndSearch(props: ProfileAndSearchProps) {
 
@@ -56,17 +56,20 @@ export function ProfileAndSearch(props: ProfileAndSearchProps) {
                 </DialogActions>
             </Dialog>
 
-            <div className={classes.root}>
+            <Composition
+                templateCols={`1fr auto`}
+                alignItems="center"
+            >
 
-                <div className={classes.myNameContainer}>
-                    <Typography variant="caption">
-                        {myName || ''}
-                    </Typography>
-                    <IconButton onClick={() => setDialogOpenState(true)}>
-                        <AccountCircleIcon fontSize="large" />
-                    </IconButton>
-                </div>
-            </div>
+                <Typography variant="caption" style={{ textAlign: 'right' }}>
+                    {myName || ''}
+                </Typography>
+
+                <IconButton onClick={() => setDialogOpenState(true)}>
+                    <AccountCircleIcon fontSize="large" />
+                </IconButton>
+
+            </Composition>
 
         </>
     );
