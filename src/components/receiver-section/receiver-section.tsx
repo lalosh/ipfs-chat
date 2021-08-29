@@ -20,9 +20,14 @@ export function ReceiverSection(props: ReceiverSectionProps) {
             <div className={classes.receiverContainer}>
                 {
                     showOpenButton ?
-                        <IconButton onClick={openDrawer}>
-                            <MenuIcon />
-                        </IconButton>
+                        <>
+                            <IconButton onClick={openDrawer}>
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography>
+                                {'Contacts List'}
+                            </Typography>
+                        </>
                         :
                         null
                 }

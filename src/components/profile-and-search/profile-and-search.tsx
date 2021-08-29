@@ -24,7 +24,7 @@ export function ProfileAndSearch(props: ProfileAndSearchProps) {
         <>
 
             <Dialog open={dialogOpenState && !myName} onClose={dialogCloseHandler}>
-                <DialogTitle>
+                <DialogTitle style={{ padding: '0' }}>
                     <Typography>
                         <IconButton>
                             <PersonAddIcon />
@@ -35,12 +35,16 @@ export function ProfileAndSearch(props: ProfileAndSearchProps) {
                 <DialogContent dividers>
                     <div className={classes.formContainer}>
                         <Typography color="textSecondary">
-                            {'The name you will enter here is the name other users can see.'}
+                            {'Enter your chat username:'}
                         </Typography>
                         <TextField
                             className={classes.nameInput}
                             variant="outlined"
                             value={name}
+                            onKeyUp={(event) => {
+                                if (event.key == 'Enter')
+                                    dialogCloseHandler();
+                            }}
                             onChange={(event) => setName(event.target.value)}
                         />
                     </div>

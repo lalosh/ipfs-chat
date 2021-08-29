@@ -7,6 +7,7 @@ import { store } from '../store';
 import { NODE_ID } from '../../types/node-id.type';
 import { receiveMessage, ReceiveMessageAction } from '../actions/receive-message';
 import { SendMessageAction } from '../actions/send-message';
+import { incrementUnReadMessagesCount } from '../actions/un-read-message.action';
 
 
 export let MY_IPFS_NODE: any = null;
@@ -27,7 +28,7 @@ export function* initIpfsEffect(): any {
                     Addresses: {
                         Swarm: [
                             // This is a public webrtc-star server
-                            '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+                            // '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
                             '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
                             // '/ip4/127.0.0.1/tcp/13579/wss/p2p-webrtc-star'
                         ]
@@ -56,16 +57,21 @@ export function* initIpfsEffect(): any {
 
             yield MY_IPFS_NODE.pubsub.subscribe(MESSAGES_WORKSPACE, function receiveMessageHandler(message: any) {
 
-                var audio = new Audio('/audio/receive.mp3');
-                audio.play();
-
-
                 const data = new TextDecoder().decode(message.data);
                 const from = message.from;
 
                 const parsedMessage: Omit<ReceiveMessageAction, "type" | "from"> = JSON.parse(data);
 
-                if (nodeID.id == parsedMessage.to)
+                if (nodeID.id == parsedMessage.to) {
+
+                    var audio = new Audio('/audio/receive.mp3');
+                    audio.play();
+
+                    store.dispatch(
+                        incrementUnReadMessagesCount({
+                            friendId: from
+                        })
+                    )
 
                     store.dispatch(receiveMessage({
                         messageType: parsedMessage.messageType,
@@ -73,6 +79,7 @@ export function* initIpfsEffect(): any {
                         to: nodeID.id,
                         message: parsedMessage.message
                     }));
+                }
             });
 
 

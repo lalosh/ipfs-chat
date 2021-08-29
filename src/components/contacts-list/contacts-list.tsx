@@ -9,8 +9,20 @@ import moment from 'moment';
 
 export function ContactsList(props: ContactsListProps) {
 
-    const { friends, selectedFriendId, setSelectedFriendID, messages } = props;
+    const {
+        friends,
+        selectedFriendId,
+        setSelectedFriendID,
+        messages,
+        drawerCloseHandler,
+        unReadMessages,
+        resetUnReadMessagesCount,
+    } = props;
+
     const classes = useContactsListStyles();
+
+
+
 
     return (
         <div className={classes.root}>
@@ -24,7 +36,11 @@ export function ContactsList(props: ContactsListProps) {
                     Object.keys(friends).map(friendId => (
 
                         <div
-                            onClick={() => setSelectedFriendID({ friendId })}
+                            onClick={() => {
+                                drawerCloseHandler()
+                                setSelectedFriendID({ friendId })
+                                resetUnReadMessagesCount({ friendId })
+                            }}
                             key={friendId}
                             className={clsx(classes.listItem, {
                                 [classes.activeItem]: friendId == selectedFriendId
@@ -42,7 +58,10 @@ export function ContactsList(props: ContactsListProps) {
                                         messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'text' ?
                                             messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.message ?? '...'
                                             :
-                                            'file'
+                                            messages?.[friendId]?.[messages?.[friendId]?.length - 1].messageType == 'file' ?
+                                                'file'
+                                                :
+                                                ''
                                     }
                                 </Typography>
                             </div>
@@ -51,12 +70,20 @@ export function ContactsList(props: ContactsListProps) {
                                 <Typography color="textSecondary">
                                     {
                                         messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.timestamp ?
-                                            moment(messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.timestamp).format('mm:ss')
+                                            moment(messages?.[friendId]?.[messages?.[friendId]?.length - 1]?.timestamp).format('hh:mm A')
                                             :
                                             ''
                                     }
                                 </Typography>
-                                {/* <div className={classes.isOnline}></div> */}
+                                {
+                                    selectedFriendId == friendId
+                                        ||
+                                        !unReadMessages[friendId]
+                                        ?
+                                        null
+                                        :
+                                        <div className={classes.unReadContainer}>{`${unReadMessages?.[friendId] ?? 0}`}</div>
+                                }
                             </div>
                         </div>
                     ))

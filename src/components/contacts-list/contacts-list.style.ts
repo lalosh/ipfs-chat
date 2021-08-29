@@ -53,5 +53,17 @@ export const useContactsListStyles = makeStyles({
         flexDirection: 'column',
         alignItems: 'flex-end',
         justifyContent: 'center',
+    },
+    unReadContainer:{
+        background: "#eac50f",
+        width: "30px",
+        height: "30px",
+        borderRadius: "50%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "18px",
+        color: "white",
+        border: "2px solid #ab7107"
     }
 });

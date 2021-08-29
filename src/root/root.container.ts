@@ -7,9 +7,9 @@ import { RootComponent } from "./root.component";
 function mapStateToProps(state: RootState) {
 
     return {
-        
+        messages: state.messages,
     }
- }
+}
 
 
 const mapActionToProps = {

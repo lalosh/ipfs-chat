@@ -18,6 +18,11 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { SendMessageAction } from '../../state/actions/send-message';
 declare var MediaRecorder: any;
+import {Composition} from 'atomic-layout';
+
+
+
+
 
 export function ChatsInputs(props: ChatInputsProps) {
 
@@ -198,7 +203,10 @@ export function ChatsInputs(props: ChatInputsProps) {
     if(!selectedFriendId) return null;
 
     return (
-        <div className={classes.root}>
+        <Composition
+        className={classes.root}
+        templateCols={`auto auto 1fr auto auto`}
+        >
 
             <IconButton
                 onClick={() => {
@@ -237,7 +245,7 @@ export function ChatsInputs(props: ChatInputsProps) {
                         <MicIcon />
                     </IconButton>
                     :
-                    <>
+                    <Composition templateCols={`auto 1fr auto`} alignItems="center">
                         <IconButton ref={deleteButtonRef} >
                             <DeleteSweepIcon />
                         </IconButton>
@@ -247,7 +255,7 @@ export function ChatsInputs(props: ChatInputsProps) {
                         <IconButton ref={stopButtonRef}>
                             <CheckCircleOutlineIcon />
                         </IconButton>
-                    </>
+                    </Composition>
             }
 
 
@@ -272,7 +280,7 @@ export function ChatsInputs(props: ChatInputsProps) {
             <IconButton onClick={sendMessageHandler}>
                 <SendIcon />
             </IconButton>
-        </div>
+        </Composition>
     );
 }
 

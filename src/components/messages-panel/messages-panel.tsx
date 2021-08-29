@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { cidToBlobLinks } from "../../utils/ipfs-utils";
 import { MY_IPFS_NODE } from "../../state/effects/init-ipfs.effect";
 import { useState } from "react";
+import { useRef } from "react";
 
 function RenderTextMessage({ message }: { message: MessageObject }) {
 
@@ -19,7 +20,7 @@ function RenderTextMessage({ message }: { message: MessageObject }) {
                 {message.message}
             </Typography>
 
-            <Typography variant="caption" color="textSecondary" className={classes.time}>
+            <Typography variant="body1" color="textSecondary" className={classes.time}>
                 {moment(message.timestamp).format('h:mm:ss')}
             </Typography>
         </>
@@ -62,7 +63,7 @@ function RenderFileMessage({ message }: { message: MessageObject }) {
             </a>
 
 
-            <Typography variant="caption" color="textSecondary" className={classes.time}>
+            <Typography variant="body1" color="textSecondary" className={classes.time}>
                 {moment(message.timestamp).format('h:mm:ss')}
             </Typography>
         </>
@@ -104,7 +105,7 @@ function RenderVoiceMessage({ message }: { message: MessageObject }) {
             <audio src={blobUrl} controls></audio>
 
 
-            <Typography variant="caption" color="textSecondary" className={classes.time}>
+            <Typography variant="body1" color="textSecondary" className={classes.time}>
                 {moment(message.timestamp).format('h:mm:ss')}
             </Typography>
         </>
@@ -142,11 +143,11 @@ function RenderImageMessage({ message }: { message: MessageObject }) {
             <img
                 src={blobUrl}
                 alt={fileName}
-                style={{ maxWidth: '100%', maxHeight: '40vh' }}
+                style={{ maxWidth: '100%', borderRadius: '4px' }}
             />
 
 
-            <Typography variant="caption" color="textSecondary" className={classes.time}>
+            <Typography variant="body1" color="textSecondary" className={classes.time}>
                 {moment(message.timestamp).format('h:mm:ss')}
             </Typography>
         </>
@@ -158,6 +159,14 @@ export function MessagesPanel(props: MessagesPanelProps) {
 
     const { selectedFriendId, messages, myNodeId } = props;
     const classes = useMessagesPanelStyles();
+    const messagesContainerRef = useRef<any>(null);
+
+    useEffect(() => {
+        if (messagesContainerRef && messagesContainerRef.current) {
+
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+    }, [messages.length])
 
     const renderedMessages = messages.map(message => {
         switch (message.messageType) {
@@ -179,7 +188,10 @@ export function MessagesPanel(props: MessagesPanelProps) {
 
 
     return (
-        <div className={classes.root}>
+        <div
+            className={classes.root}
+            ref={messagesContainerRef}
+        >
             {
                 messages
                     .map((message, index) => (

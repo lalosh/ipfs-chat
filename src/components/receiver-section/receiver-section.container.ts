@@ -13,7 +13,7 @@ function mapStateToProps(state: RootState) {
 
     if (lastMessage) {
         const lastMessageTimestamp = lastMessage?.timestamp ?? '';
-        lastSeen = moment(lastMessageTimestamp).format('h:mm:ss');
+        lastSeen = moment(lastMessageTimestamp).format('hh:mm A');
     }
 
     return {
