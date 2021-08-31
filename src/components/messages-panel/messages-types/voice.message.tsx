@@ -1,12 +1,13 @@
 import { useMessagesPanelStyles } from "../messages-panel.style";
-import { Typography } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import moment from 'moment';
 import { FileMessageObject, MessageObject } from "../../../state/reducers/messages.reducer";
 import { useEffect } from "react";
 import { cidToBlobLinks } from "../../../utils/ipfs-utils";
 import { MY_IPFS_NODE } from "../../../state/effects/init-ipfs.effect";
 import { useState } from "react";
-
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { copyTextToClipboard } from "./messages.utils";
 
 
 export function RenderVoiceMessage({ message }: { message: MessageObject }) {
@@ -42,6 +43,13 @@ export function RenderVoiceMessage({ message }: { message: MessageObject }) {
 
             <Typography variant="body1" color="textSecondary" className={classes.time}>
                 {moment(message.timestamp).format('h:mm:ss')}
+                <IconButton
+                    onClick={() => {
+                        copyTextToClipboard(cid)
+                    }}
+                >
+                    <FileCopyIcon />
+                </IconButton>
             </Typography>
         </>
     );
